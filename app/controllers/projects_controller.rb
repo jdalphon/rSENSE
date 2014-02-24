@@ -321,58 +321,68 @@ class ProjectsController < ApplicationController
 
   def edit_fields
     @project = Project.find(params[:id])
+    if can_edit?(@project)
+      respond_to do |format|
+        format.html
+      end
+    else
+      redirect_to project_path(@project)
+    end
   end
 
   def save_fields
-  
     @project = Project.find(params[:id])
+    if can_edit?(@project)
 
-    # Save all the fields
-    @project.fields.each do |field| 
-      restrictions = nil
-      if params.has_key?("#{field.id}_restrictions")
-        restrictions = params["#{field.id}_restrictions"].split(',')
-        if restrictions.count < 1
-          restrictions = nil
+      # Save all the fields
+      @project.fields.each do |field| 
+        restrictions = nil
+        if params.has_key?("#{field.id}_restrictions")
+          restrictions = params["#{field.id}_restrictions"].split(',')
+          if restrictions.count < 1
+            restrictions = nil
+          end
+        end
+          
+        if !(field.update_attributes({name: params["#{field.id}_name"],unit: params["#{field.id}_unit"],restrictions: restrictions} || ""))
+          respond_to do |format|
+            flash[:error] = "Field names must be unique"
+            redirect_to "/projects/#{@project.id}/edit_fields"
+            return
+          end
         end
       end
-        
-      if !(field.update_attributes({name: params["#{field.id}_name"],unit: params["#{field.id}_unit"],restrictions: restrictions} || ""))
-        respond_to do |format|
-          flash[:error] = "Field names must be unique"
+
+      # If there's a new field, add it.
+      field_type = params[:new_field]
+
+      if field_type == "Location"
+        latitude  = Field.new({project_id: @project.id, field_type: get_field_type("Latitude"), name: "Latitude", unit: "deg"})
+        longitude = Field.new({project_id: @project.id, field_type: get_field_type("Longitude"), name: "Longitude", unit:"deg"})
+  
+        unless latitude.save && longitude.save
+          flash[:error] = "#{latitude.errors.full_messages()}\n\n#{longitude.errors.full_messages()}"
+          redirect_to "/projects/#{@project.id}/edit_fields"
+          return
+        end
+      elsif field_type != ""
+        next_name = Field.get_next_name(@project,get_field_type(params[:new_field]))
+        field = Field.new({project_id: @project.id, field_type: get_field_type(field_type), name: next_name})
+
+        unless field.save
+          flash[:error] = field.errors.full_messages()
           redirect_to "/projects/#{@project.id}/edit_fields"
           return
         end
       end
-    end
 
-    # If there's a new field, add it.
-    field_type = params[:new_field]
-
-    if field_type == "Location"
-      latitude  = Field.new({project_id: @project.id, field_type: get_field_type("Latitude"), name: "Latitude", unit: "deg"})
-      longitude = Field.new({project_id: @project.id, field_type: get_field_type("Longitude"), name: "Longitude", unit:"deg"})
- 
-      unless latitude.save && longitude.save
-        flash[:error] = "#{latitude.errors.full_messages()}\n\n#{longitude.errors.full_messages()}"
-        redirect_to "/projects/#{@project.id}/edit_fields"
-        return
+      if field_type == ""
+        redirect_to project_path(@project), notice: "Changes to fields saved."
+      else
+        redirect_to "/projects/#{@project.id}/edit_fields", notice: "Field added"
       end
-    elsif field_type != ""
-      next_name = Field.get_next_name(@project,get_field_type(params[:new_field]))
-      field = Field.new({project_id: @project.id, field_type: get_field_type(field_type), name: next_name})
-
-      unless field.save
-        flash[:error] = field.errors.full_messages()
-        redirect_to "/projects/#{@project.id}/edit_fields"
-        return
-      end
-    end
-
-    if field_type == ""
-      redirect_to project_path(@project), notice: "Changes to fields saved."
     else
-      redirect_to "/projects/#{@project.id}/edit_fields", notice: "Field added"
+      redirect_to project_path(@project)
     end
   end
 
