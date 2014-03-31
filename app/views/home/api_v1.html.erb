@@ -282,7 +282,7 @@
         <td class="POST def">POST</td>
         <td class="method"> Data Sets </td>
         <td class="code">/api/v1/projects/XX/jsonDataUpload</td>
-        <td class="args">contribution_key(req), contributor_name(req), data(req)</td>
+        <td class="args">contribution_key(req), contributor_name(req), data(req), title(req)</td>
       </tr>
       <tr class="more" style="">
         <td colspan="4">
@@ -294,6 +294,7 @@
           <pre>
   {
     "contribution_key" => "key created by project owner (string)",
+    "title" => "Title for data set. Must be unique to project (string)"
     "contributor_name" => (string),
     "data" =>
       {

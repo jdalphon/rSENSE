@@ -3,7 +3,7 @@ class VisualizationsController < ApplicationController
   include ActionView::Helpers::DateHelper
 
   skip_before_filter :authorize, only: [:show, :displayVis, :index, :embedVis]
-
+ 
   # GET /visualizations
   # GET /visualizations.json
   def index
