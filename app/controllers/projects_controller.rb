@@ -113,7 +113,7 @@ class ProjectsController < ApplicationController
     end
     respond_to do |format|
       if @project.save
-        format.html { redirect_to "/projects/#{@project.id}/edit_fields"}
+        format.html { redirect_to "/projects/#{@project.id}/edit_fields" }
         format.json { render json: @project.to_hash(false), status: :created, location: @project }
       else
         flash[:error] = @project.errors.full_messages
