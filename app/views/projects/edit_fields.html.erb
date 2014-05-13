@@ -1,79 +1,119 @@
-<% if can_edit?(@project) %>
-  <%= form_tag "/projects/#{@project.id}/save_fields", id: 'fields_table' do %>
-    <div class="row">
-      <div class="col-lg-8 col-lg-offset-2">
-        <table class="fields_table table table-striped table-bordered">
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Type</th>
-              <th>Units</th>
-              <th>Restrictions *</th>
-              <th>Delete Field **</th>
-            </tr>
-          </thead>
-          <tbody>
-            <% @project.fields.each do |field|%>
-              <tr class="<%= (field.field_type == get_field_type("Latitude") || field.field_type == get_field_type("Longitude")) ? "location" : ""%>">
-                <td><input class="form-control" type="text" name="<%=field.id%>_name" value="<%= (defined?(@tmp_save) && @tmp_save.has_key?("#{field.id}_name")) ? @tmp_save["#{field.id}_name"] : field.name%>"></td>
-                <td><%=get_field_name(field.field_type)%></td>
-                <td>
-                  <% if field.field_type == get_field_type("Number")%>
-                    <input class="input-small form-control" type="text" name="<%=field.id%>_unit" value="<%=field.unit%>">
-                  <% else %>
-                    <input class="input-small form-control" type="text" name="<%=field.id%>_unit" value="<%=field.unit%>" readonly disabled>
-                  <% end %>
-                </td>
-                <td>
-                  <%if field.field_type == get_field_type("Text")%>
-                    <input class="input-small form-control" type="text" name="<%=field.id%>_restrictions" value="<%=field.restrictions.nil? ? "" : field.restrictions.join(',')%>">
-                  <% end %>
-                </td>
-                <td class="center">
-                  <button class="btn btn-danger field_delete" href="/fields/<%=field.id%>" fid="<%=field.id%>" <%= @project.data_sets.count > 0 ? "disabled" : ""%>>
-                    <i class="fa fa-times"></i> Delete
-                  </button>
-                </td>
+<% if can_edit? @project %>
+  <% if @project.fields.count == 0 %>
+
+    <div class="row field_edit_options">
+      <div class="col-md-12">
+        <h2>How would you like to define your fields?</h2><br/>
+      </div>
+    </div>
+    <div class="row field_edit_options">
+      <div class="col-md-5">
+        <a class="btn btn-success
+          col-md-8 col-md-offset-2 
+          col-xs-8 col-xs-offset-2"
+          id='set_up_manually'>
+          <i class="fa fa-keyboard-o"></i>
+          <br/>
+          <h3>Setup Manually</h3>
+        </a>
+      </div>
+      <div class="col-md-2 col-xs-12 center"><h3 class="or">- or -</h3></div>
+      <div class="col-md-5">
+        <a class="btn btn-success 
+          col-md-8 col-md-offset-2 
+          col-xs-8 col-xs-offset-2" 
+          id='template_file_upload'>
+          <i class="fa fa-file-o"></i>
+          <br/>
+          <h3>Upload A File</h3>
+        </a>
+      </div>  
+    </div>
+  <%end%>
+  <div id="manual_setup" style="<%= @project.fields.count==0 ? 'display:none' : ''%>">
+    <%= form_tag "/projects/#{@project.id}/save_fields", id: 'fields_table' do %>
+      <div class="row">
+        <div class="col-lg-8 col-lg-offset-2">
+          <table class="fields_table table table-striped table-bordered">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Type</th>
+                <th>Units</th>
+                <th>Restrictions *</th>
+                <th>Delete Field **</th>
               </tr>
-            <% end %>
-          </tbody>
-        </table>  
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-md-8 col-md-offset-2">
-        <i>* Restrictions are a comma separated list of values that limit user input to only the predefined values.</i><br/>
-        <i>&nbsp;&nbsp;e.g. High School, Middle School, Elementary School, College</i><br/><br/>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-md-8 col-md-offset-2">
-        <i>** Fields can't be deleted if the project contains data sets. </i>
-      </div>
-    </div>
-    <div class="row">
-      <hr class="col-lg-8 col-lg-offset-2">
-    </div>
-    
-    <div class="row">
-      <div class="col-lg-8 col-lg-offset-2">
-        <div class="row">
-          <div class="col-lg-3">
-              <select form="fields_table" name="new_field" id="new_field" class="form-control">
-                <option value="">Add Field</option>
-                <option value="Number">Number</option>
-                <option value="Text">Text</option>
-                <option value="Timestamp">Timestamp</option>
-                <% if !(@project.fields.any? {|f| f.field_type == LONGITUDE_TYPE or f.field_type == LATITUDE_TYPE}) %>
-                  <option value="Location">Location</option>
-                <% end %>  
-              </select>
-          </div>
-          <div class="col-lg-3 col-lg-offset-6">
-            <%= submit_tag "Save and Return", class: 'btn btn-default', id: 'fields_form_submit' %>
-          </div>
+            </thead>
+            <tbody>
+              <% @project.fields.each do |field|%>
+                <tr class="<%= (field.field_type == get_field_type("Latitude") || field.field_type == get_field_type("Longitude")) ? "location" : ""%>">
+                  <td><input class="form-control" type="text" name="<%=field.id%>_name" value="<%= (defined?(@tmp_save) && @tmp_save.has_key?("#{field.id}_name")) ? @tmp_save["#{field.id}_name"] : field.name%>"></td>
+                  <td><%=get_field_name(field.field_type)%></td>
+                  <td>
+                    <% if field.field_type == get_field_type("Number")%>
+                      <input class="input-small form-control" type="text" name="<%=field.id%>_unit" value="<%=field.unit%>">
+                    <% else %>
+                      <input class="input-small form-control" type="text" name="<%=field.id%>_unit" value="<%=field.unit%>" readonly disabled>
+                    <% end %>
+                  </td>
+                  <td>
+                    <%if field.field_type == get_field_type("Text")%>
+                      <input class="input-small form-control" type="text" name="<%=field.id%>_restrictions" value="<%=field.restrictions.nil? ? "" : field.restrictions.join(',')%>">
+                    <% end %>
+                  </td>
+                  <td class="center">
+                    <button class="btn btn-danger field_delete" href="/fields/<%=field.id%>" fid="<%=field.id%>" <%= @project.data_sets.count > 0 ? "disabled" : ""%>>
+                      <i class="fa fa-times"></i> Delete
+                    </button>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>  
         </div>
       </div>
-    </div> 
-  <% end %>  
-<% end %>  
+      <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+          <i>* Restrictions are a comma separated list of values that limit user input to only the predefined values.</i><br/>
+          <i>&nbsp;&nbsp;e.g. High School, Middle School, Elementary School, College</i><br/><br/>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+          <i>** Fields can't be deleted if the project contains data sets. </i>
+        </div>
+      </div>
+      <div class="row">
+        <hr class="col-lg-8 col-lg-offset-2">
+      </div>
+      
+      <div class="row">
+        <div class="col-lg-8 col-lg-offset-2">
+          <div class="row">
+            <div class="col-lg-3">
+                <select form="fields_table" name="new_field" id="new_field" class="form-control">
+                  <option value="">Add Field</option>
+                  <option value="Number">Number</option>
+                  <option value="Text">Text</option>
+                  <option value="Timestamp">Timestamp</option>
+                  <% if !(@project.fields.any? {|f| f.field_type == LONGITUDE_TYPE or f.field_type == LATITUDE_TYPE}) %>
+                    <option value="Location">Location</option>
+                  <% end %>  
+                </select>
+            </div>
+            <div class="col-lg-3 col-lg-offset-6">
+              <%= submit_tag "Save and Return", class: 'btn btn-default', id: 'fields_form_submit' %>
+            </div>
+          </div>
+        </div>
+      </div> 
+    <% end %> 
+   
+  </div>
+<% end %>
+
+<div style="display:none">
+  <%= form_tag "/projects/#{@project.id}/templateUpload", method: 'post',multipart: true, id: 'template_file_form' do %>
+    <%= file_field_tag 'file', id: 'template_file_input' %>
+  <% end %>
+</div>

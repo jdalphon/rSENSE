@@ -1,5 +1,23 @@
 $ ->
   if namespace.controller is "projects" and namespace.action is "edit_fields"
+    
+    ###
+    # Controls for uploading template file.
+    ###
+    ($ '#template_file_upload').click ->
+      ($ '#template_file_input').click()
+      false
+    ($ '#template_file_input').change ->
+      ($ '#template_file_form').submit()
+    
+    ###
+    # Switch to manual entry view
+    ###
+    ($ '#set_up_manually').click () ->
+      ($ '.field_edit_options').hide()
+      ($ '#manual_setup').show()
+    
+    
     ($ '#new_field').change ->
       ($ '#fields_form_submit').click()
 
