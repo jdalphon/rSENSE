@@ -8,7 +8,7 @@
           <label for="title"><b>Title</b></label>
           <input type="text" id="title" name="title" value="<%=@filename%>" class="form-control" autofocus>
         </div>
-        <% if @cur_user.nil? %>
+        <% if current_user.nil? %>
           <div class="col-lg-3">
             <input type="hidden" id="contrib_name" name="contrib_name" value="<%=session[:contributor_name]%>">
           </div>

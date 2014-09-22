@@ -85,7 +85,7 @@ class VisualizationsController < ApplicationController
   # POST /visualizations
   # POST /visualizations.json
   def create
-    params[:visualization][:user_id] = @cur_user.id
+    params[:visualization][:user_id] = current_user.id
 
     # Remove any piggybacking updates
     if params[:visualization].try(:[], :tn_file_key)
@@ -337,7 +337,7 @@ class VisualizationsController < ApplicationController
   private
 
   def visualization_params
-    if @cur_user.try(:admin)
+    if current_user.try(:admin)
       params[:visualization].permit(:content, :data, :project_id, :globals, :title, :user_id, :featured,
                                     :featured_at, :tn_src, :tn_file_key, :summary, :thumb_id)
     else

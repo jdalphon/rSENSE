@@ -3,7 +3,7 @@
     <div class="panel panel-default">
       <%= form_for(@user, html: {id: 'edit_password_form'}) do |ff| %>
         <div class="panel-heading">
-          <% if @cur_user.admin? and not @cur_user == @user %>
+          <% if current_user.admin? and not current_user == @user %>
             <h2>Change Password for <%= @user.name %></h2>
           <% else %>
             <h2>Change Password</h2>
@@ -13,7 +13,7 @@
         <div class="panel-body">
           <%= hidden_field_tag :new_password, "1" %>
           <div class="form-group">
-            <% unless @cur_user.admin? or session[:pw_change] %>
+            <% unless current_user.admin? or session[:pw_change] %>
               <p>
               <%= label_tag :current_password, "Current Password:" %>
               <%= password_field_tag :current_password, @cur_pw, class: "form-control", id: 'curpass' %>
@@ -44,13 +44,13 @@
     </div>
   </div>
 </div>
-<% if @cur_user.admin? or @cur_user == @user %>
+<% if current_user.admin? or current_user == @user %>
   <div class="">
     <div class="col-lg-6">
       <div class="panel panel-default">
         <%= form_for(@user, html: {id: 'edit_email_form'}) do |ff| %>
           <div class="panel-heading">
-            <% if @cur_user.admin? and not @cur_user == @user %>
+            <% if current_user.admin? and not current_user == @user %>
               <h2>Change Email Address for <%= @user.name %></h2>
             <% else %>
               <h2>Change Email Address</h2>
@@ -59,7 +59,7 @@
           
           <div class="panel-body">
             <div class="form-group">
-              <% unless @cur_user.admin? %>
+              <% unless current_user.admin? %>
                 <p>
                   <%= label_tag :current_password, "Password:" %>
                   <%= password_field_tag(:current_password, nil, class: "form-control") %>
@@ -90,7 +90,7 @@
   </div>
 <% end %>
 
-<% if @cur_user.admin? %>
+<% if current_user.admin? %>
   <div class="row">
     <div class="col-lg-6 col-lg-offset-3">
       <div class="panel panel-default">

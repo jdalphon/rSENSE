@@ -1,6 +1,10 @@
 require 'nokogiri'
 
 class User < ActiveRecord::Base
+  # Include default devise modules. Others available are:
+  # :confirmable, :lockable, :timeoutable and :omniauthable
+  devise :database_authenticatable, :registerable,
+         :recoverable, :rememberable, :trackable, :validatable
   include ActionView::Helpers::SanitizeHelper
 
   validates_uniqueness_of :email, case_sensitive: false
@@ -11,8 +15,6 @@ class User < ActiveRecord::Base
   validates :email, format: { with: /\@.*\./ }, confirmation: true
 
   validates :password, presence: true, on: :create
-
-  has_secure_password
 
   before_save :sanitize_user
   before_save :summernote_media_objects
@@ -66,13 +68,7 @@ class User < ActiveRecord::Base
     end
     h
   end
-
-  def reset_validation!
-    key = SecureRandom.hex(16)
-    self.validation_key = SecureRandom.hex(16)
-    key
-  end
-
+  
   def summernote_media_objects
     self.bio = MediaObject.create_media_objects(bio, 'user_id', id)
   end

@@ -58,7 +58,7 @@ class TutorialsController < ApplicationController
   # POST /tutorials.json
   def create
     @tutorial = Tutorial.new(tutorial_params)
-    @tutorial.user_id = @cur_user.id
+    @tutorial.user_id = current_user.id
 
     respond_to do |format|
       if @tutorial.save

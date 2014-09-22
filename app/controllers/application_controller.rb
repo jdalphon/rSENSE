@@ -1,6 +1,8 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery
 
+  before_action :configure_permitted_parameters, if: :devise_controller?
+  
   before_filter :find_user
   before_filter :authorize
 
@@ -21,16 +23,17 @@ class ApplicationController < ActionController::Base
   end
 
   def find_user
-    @cur_user = User.find_by_id(session[:user_id])
+    current_user = User.find_by_id(session[:user_id])
     @namespace = { action: params[:action], controller: params[:controller] }
     @version = `(git describe --tags) 2>&1`
     @version = 'Development Version' if @version == '' || @version =~ /fatal:/
   end
 
   def authorize
-    unless User.find_by_id(session[:user_id])
-      redirect_to '/login'
-    end
+    true
+#     unless user_signed_in?
+#       redirect_to new_user_session_path
+#     end
   end
 
   def authorize_allow_key
@@ -49,7 +52,7 @@ class ApplicationController < ActionController::Base
 
   def authorize_admin
     begin
-      if @cur_user.admin == true
+      if current_user.admin == true
         return true
       end
     rescue
@@ -80,7 +83,7 @@ class ApplicationController < ActionController::Base
 
       if @user and @user.authenticate(params[:password])
         @user.update_attributes(last_login: Time.now)
-        @cur_user = @user
+        current_user = @user
       else
         respond_to do |format|
           format.json { render json: { msg: 'Email & Password do not match.' }, status: :unauthorized }
@@ -94,7 +97,7 @@ class ApplicationController < ActionController::Base
       key = project.contrib_keys.find_by_key(params[:contribution_key])
       if project && !key.nil? && data_set.key == key.name
         if params.key? :contributor_name
-          @cur_user = User.find_by_id(project.owner.id)
+          current_user = User.find_by_id(project.owner.id)
         else
           respond_to do |format|
             format.json { render json: { msg: 'Missing contributor name' }, status: :unprocessable_entity }
@@ -110,7 +113,7 @@ class ApplicationController < ActionController::Base
       project = Project.find_by_id(params[:id] || params[:pid])
       if project && !project.contrib_keys.find_by_key(params[:contribution_key].downcase).nil?
         if params.key? :contributor_name
-          @cur_user = User.find_by_id(project.owner.id)
+          current_user = User.find_by_id(project.owner.id)
         else
           respond_to do |format|
             format.json { render json: { msg: 'Missing contributor name' }, status: :unprocessable_entity }
@@ -130,7 +133,7 @@ class ApplicationController < ActionController::Base
       if data_set &&
           data_set.key == params[:contribution_key].downcase &&
           !data_set.project.contrib_keys.find_by_key(params[:contribution_key].downcase).nil?
-        @cur_user = User.find_by_id(data_set.owner.id)
+        current_user = User.find_by_id(data_set.owner.id)
       else
         respond_to do |format|
           format.json { render json: { msg: 'Contribution key not valid' }, status: :unauthorized }
@@ -142,6 +145,21 @@ class ApplicationController < ActionController::Base
         format.json { render json: { msg: 'Must send Email & Password with this request' }, status: :unauthorized }
       end
     end
+  end
+
+  include DeviseHelper
+  
+
+  protected
+  
+  def configure_permitted_parameters
+    devise_parameter_sanitizer.for(:sign_up) << :name
+  end
+  
+  private 
+  
+  def after_sign_out_path_for(resource_or_scope)
+    URI.parse(request.referer).path if request.referer
   end
 end
 

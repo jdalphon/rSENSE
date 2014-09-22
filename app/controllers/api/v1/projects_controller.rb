@@ -16,13 +16,13 @@ module Api
 
       def create
         project = Project.new
-        project.user_id = @cur_user.id
+        project.user_id = current_user.id
 
         if params[:project_name].nil?
-          if @cur_user.name[-1].downcase == 's'
-            project.title = "#{@cur_user.name}' Project"
+          if current_user.name[-1].downcase == 's'
+            project.title = "#{current_user.name}' Project"
           else
-            project.title = "#{@cur_user.name}'s Project"
+            project.title = "#{current_user.name}'s Project"
           end
         else
           project.title = params[:project_name]

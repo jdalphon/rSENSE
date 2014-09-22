@@ -6,7 +6,7 @@ class NewsController < ApplicationController
   include ApplicationHelper
 
   def index
-    if @cur_user.try(:admin)
+    if current_user.try(:admin)
       @news = News.order('created_at DESC').limit(10)
     else
       @news = News.where(hidden: false).order('created_at DESC').limit(10)
@@ -37,7 +37,7 @@ class NewsController < ApplicationController
   # POST /news.json
   def create
     @news = News.new(news_params)
-    @news.user_id = @cur_user.id
+    @news.user_id = current_user.id
 
     respond_to do |format|
       if @news.save
