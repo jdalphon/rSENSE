@@ -5,7 +5,8 @@ class ApplicationController < ActionController::Base
   
   before_filter :find_user
   before_filter :authorize
-
+  
+  
   skip_before_filter :verify_authenticity_token, only: [:options_req]
   skip_before_filter :find_user, only: [:options_req]
   skip_before_filter :authorize, only: [:options_req]
@@ -30,10 +31,14 @@ class ApplicationController < ActionController::Base
   end
 
   def authorize
-    true
-#     unless user_signed_in?
-#       redirect_to new_user_session_path
-#     end
+    logger.info "---#{params}"
+    if ['devise/sessions','devise/passwords'].include? params[:controller]
+      true
+    else
+      unless user_signed_in?
+        redirect_to new_user_session_path
+      end
+    end
   end
 
   def authorize_allow_key
@@ -47,7 +52,7 @@ class ApplicationController < ActionController::Base
     dset = DataSet.find_by_id(params[:id])
     return if dset && ckey == dset.project.id
 
-    redirect_to '/login'
+    redirect_to new_user_session_path
   end
 
   def authorize_admin
