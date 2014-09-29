@@ -74,19 +74,19 @@ Rsense::Application.routes.draw do
   post '/projects/:id/finishTemplateUpload', to: 'projects#finishTemplateUpload'
   put '/projects/:id/removeField' => 'projects#removeField'
 
-#   controller :sessions do
-#     get 'login' => :new
-#     post 'login' => :create
-#     delete 'login' => :destroy
-#   end
+  #   controller :sessions do
+  #     get 'login' => :new
+  #     post 'login' => :create
+  #     delete 'login' => :destroy
+  #   end
   get '/sessions/verify' => 'sessions#verify'
 
-#   get '/users/pw_request' => 'users#pw_request'
-#   post '/users/pw_send_key' => 'users#pw_send_key'
-#   get '/users/pw_reset/:key' => 'users#pw_reset'
-#   resources :users
-#   get '/users/validate/:key' => 'users#validate'
-#   get '/users/:id/contributions' => 'users#contributions'
+  #   get '/users/pw_request' => 'users#pw_request'
+  #   post '/users/pw_send_key' => 'users#pw_send_key'
+  #   get '/users/pw_reset/:key' => 'users#pw_reset'
+  #   resources :users
+  #   get '/users/validate/:key' => 'users#validate'
+  #   get '/users/:id/contributions' => 'users#contributions'
 
   post '/projects/:id/updateLikedStatus' => 'projects#updateLikedStatus'
 

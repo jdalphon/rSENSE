@@ -18,18 +18,18 @@ class RegisterTest < ActionDispatch::IntegrationTest
     assert page.has_content?('Register for iSENSE')
     fill_in 'user_name',       with: 'Mark S.'
     fill_in 'user_email',      with: 'msherman@cs.uml.edu'
-    fill_in 'user_password',   with: 'pietime'
+    fill_in 'user_password',   with: 'pietime1'
     fill_in 'user_password_confirmation',
-                               with: 'pietime'
-    click_on 'Create User'
+                               with: 'pietime1'
+    click_on 'Sign up'
 
-    assert find('.navbar').has_content?('News'), 'No error registering'
+    assert page.has_content?('Welcome! You have signed up successfully.'), 'Failed to register.'
     assert page.has_content?('Mark S.')
 
     logout
 
-    login('msherman@cs.uml.edu', 'pietime')
+    login('msherman@cs.uml.edu', 'pietime1')
 
-    assert find('.navbar').has_content?('News'), 'Can log in with new user'
+    assert find('.navbar').has_content?('News'), 'Failed log in with new user'
   end
 end

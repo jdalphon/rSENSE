@@ -2,14 +2,15 @@ class ApplicationController < ActionController::Base
   protect_from_forgery
 
   before_action :configure_permitted_parameters, if: :devise_controller?
-  
+
   before_filter :find_user
   before_filter :authorize
-  
-  
+
   skip_before_filter :verify_authenticity_token, only: [:options_req]
   skip_before_filter :find_user, only: [:options_req]
   skip_before_filter :authorize, only: [:options_req]
+
+  after_filter :store_location
 
   def allow_cross_site_requests
     headers['Access-Control-Allow-Origin'] = '*'
@@ -24,15 +25,13 @@ class ApplicationController < ActionController::Base
   end
 
   def find_user
-    current_user = User.find_by_id(session[:user_id])
     @namespace = { action: params[:action], controller: params[:controller] }
     @version = `(git describe --tags) 2>&1`
     @version = 'Development Version' if @version == '' || @version =~ /fatal:/
   end
 
   def authorize
-    logger.info "---#{params}"
-    if ['devise/sessions','devise/passwords'].include? params[:controller]
+    if params[:controller].include? 'devise'
       true
     else
       unless user_signed_in?
@@ -83,12 +82,11 @@ class ApplicationController < ActionController::Base
     # The API call came with an email and password
     if (params.key? :email) & (params.key? :password)
       login_email = params[:email].downcase
+      build_resource
+      resource = User.where('lower(email) = ?', login_email).first
 
-      @user = User.where('lower(email) = ?', login_email).first
-
-      if @user and @user.authenticate(params[:password])
-        @user.update_attributes(last_login: Time.now)
-        current_user = @user
+      if resource.valid_password?(params[:password])
+        sign_in('user', resource)
       else
         respond_to do |format|
           format.json { render json: { msg: 'Email & Password do not match.' }, status: :unauthorized }
@@ -102,7 +100,8 @@ class ApplicationController < ActionController::Base
       key = project.contrib_keys.find_by_key(params[:contribution_key])
       if project && !key.nil? && data_set.key == key.name
         if params.key? :contributor_name
-          current_user = User.find_by_id(project.owner.id)
+          resource = User.find_by_id(project.owner.id)
+          sign_in('user', resource)
         else
           respond_to do |format|
             format.json { render json: { msg: 'Missing contributor name' }, status: :unprocessable_entity }
@@ -118,7 +117,8 @@ class ApplicationController < ActionController::Base
       project = Project.find_by_id(params[:id] || params[:pid])
       if project && !project.contrib_keys.find_by_key(params[:contribution_key].downcase).nil?
         if params.key? :contributor_name
-          current_user = User.find_by_id(project.owner.id)
+          resource = User.find_by_id(project.owner.id)
+          sign_in('user', resource)
         else
           respond_to do |format|
             format.json { render json: { msg: 'Missing contributor name' }, status: :unprocessable_entity }
@@ -138,7 +138,8 @@ class ApplicationController < ActionController::Base
       if data_set &&
           data_set.key == params[:contribution_key].downcase &&
           !data_set.project.contrib_keys.find_by_key(params[:contribution_key].downcase).nil?
-        current_user = User.find_by_id(data_set.owner.id)
+        resource = User.find_by_id(project.owner.id)
+        sign_in('user', resource)
       else
         respond_to do |format|
           format.json { render json: { msg: 'Contribution key not valid' }, status: :unauthorized }
@@ -152,18 +153,35 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def store_location
+    # store last url - this is needed for post-login redirect to whatever the user last visited.
+    return unless request.get?
+    if request.path != '/users/sign_in' &&
+        request.path != '/users/sign_up' &&
+        request.path != '/users/password/new' &&
+        request.path != '/users/password/edit' &&
+        request.path != '/users/confirmation' &&
+        request.path != '/users/sign_out' &&
+        !request.xhr? # don't store ajax calls
+      session[:previous_url] = request.fullpath
+    end
+  end
+
+  def after_sign_in_path_for(_resource)
+    session[:previous_url] || root_path
+  end
+
   include DeviseHelper
-  
 
   protected
-  
+
   def configure_permitted_parameters
     devise_parameter_sanitizer.for(:sign_up) << :name
   end
-  
-  private 
-  
-  def after_sign_out_path_for(resource_or_scope)
+
+  private
+
+  def after_sign_out_path_for(_resource_or_scope)
     URI.parse(request.referer).path if request.referer
   end
 end

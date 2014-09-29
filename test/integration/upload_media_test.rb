@@ -15,7 +15,7 @@ class UploadMediaTest < ActionDispatch::IntegrationTest
   end
 
   test 'upload media' do
-    login('nixon@whitehouse.gov', '12345')
+    login('nixon@whitehouse.gov', '12345678')
 
     # Upload media to tutorial
     tut_id = tutorials(:media_test).id

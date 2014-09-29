@@ -16,7 +16,7 @@ class ShowUserTest < ActionDispatch::IntegrationTest
   end
 
   test 'contributions' do
-    login('nixon@whitehouse.gov', '12345')
+    login('nixon@whitehouse.gov', '12345678')
 
     pid = projects(:media_test).id
     visit "/projects/#{pid}"

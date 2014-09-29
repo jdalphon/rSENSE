@@ -13,7 +13,7 @@ class SummernoteMoTest < ActionDispatch::IntegrationTest
   end
 
   test 'project_image_upload' do
-    login('kcarcia@cs.uml.edu', '12345')
+    login('kcarcia@cs.uml.edu', '12345678')
     visit '/'
     click_on 'Projects'
     find('#project_title').set('Upload Images SNMO')
@@ -32,7 +32,7 @@ class SummernoteMoTest < ActionDispatch::IntegrationTest
   end
 
   test 'tutorial_image_upload' do
-    login 'nixon@whitehouse.gov', '12345'
+    login 'nixon@whitehouse.gov', '12345678'
     visit '/tutorials'
     find('#tutorial_title').set('Test Tutorial SNMO')
     click_on 'Create Tutorial'
@@ -46,7 +46,7 @@ class SummernoteMoTest < ActionDispatch::IntegrationTest
   end
 
   test 'user_image_upload' do
-    login 'nixon@whitehouse.gov', '12345'
+    login 'nixon@whitehouse.gov', '12345678'
     click_on 'Richard N.'
     assert page.has_css? '.gravatar_img', 'Not on profile page.'
     find('#content-edit-btn').click
@@ -58,7 +58,7 @@ class SummernoteMoTest < ActionDispatch::IntegrationTest
   end
 
   test 'news_image_upload' do
-    login 'nixon@whitehouse.gov', '12345'
+    login 'nixon@whitehouse.gov', '12345678'
     visit '/news'
     page.find('#news_title').set('Test News Article SNMO')
     click_on 'Add News Item'

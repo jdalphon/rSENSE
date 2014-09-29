@@ -74,7 +74,7 @@ class ApiV1Test < ActionDispatch::IntegrationTest
     post '/api/v1/projects',
 
           email: 'kcarcia@cs.uml.edu',
-          password: '12345'
+          password: '12345678'
 
     assert_response :success
     assert keys_match(response, @project_keys), 'Keys are missing'
@@ -86,7 +86,7 @@ class ApiV1Test < ActionDispatch::IntegrationTest
 
           project_name: 'Awesome',
           email: 'kcarcia@cs.uml.edu',
-          password: '12345'
+          password: '12345678'
 
     assert_response :success
     assert keys_match(response, @project_keys), 'Keys are missing'
@@ -106,23 +106,23 @@ class ApiV1Test < ActionDispatch::IntegrationTest
     post '/api/v1/projects',
 
           email: 'kcarcia@cs.uml.edu',
-          password: '12345'
+          password: '12345678'
 
     assert_response :success
     id = parse(response)['id']
 
-    post "/api/v1/fields?field[project_id]=#{id}&field[field_type]=1&email=kcarcia%40cs%2Euml%2Eedu&password=12345"
+    post "/api/v1/fields?field[project_id]=#{id}&field[field_type]=1&email=kcarcia%40cs%2Euml%2Eedu&password=12345678"
     assert_response :success
     assert keys_match(response, @field_keys), 'Keys are missing'
   end
 
   # Create a named field
   test 'create fields named' do
-    post '/api/v1/projects?email=kcarcia%40cs%2Euml%2Eedu&password=12345'
+    post '/api/v1/projects?email=kcarcia%40cs%2Euml%2Eedu&password=12345678'
     assert_response :success
     id = parse(response)['id']
 
-    post "/api/v1/fields?field[name]=Fieldy&field[project_id]=#{id}&field[field_type]=1&email=kcarcia%40cs%2Euml%2Eedu&password=12345"
+    post "/api/v1/fields?field[name]=Fieldy&field[project_id]=#{id}&field[field_type]=1&email=kcarcia%40cs%2Euml%2Eedu&password=12345678"
     assert_response :success
     assert keys_match(response, @field_keys), 'Keys are missing'
   end
@@ -132,7 +132,7 @@ class ApiV1Test < ActionDispatch::IntegrationTest
     post '/api/v1/projects',
 
           email: 'kcarcia@cs.uml.edu',
-          password: '12345'
+          password: '12345678'
 
     assert_response :success
     id = parse(response)['id']
@@ -140,7 +140,7 @@ class ApiV1Test < ActionDispatch::IntegrationTest
     post '/api/v1/fields',
 
           email: 'kcarcia@cs.uml.edu',
-          password: '12345',
+          password: '12345678',
           field:
             {
               name: 'Favorite Color',
@@ -176,7 +176,7 @@ class ApiV1Test < ActionDispatch::IntegrationTest
       post '/api/v1/fields',
 
           email: 'kcarcia@cs.uml.edu',
-          password: '12345',
+          password: '12345678',
           field:
             {
               name: 'Field 1',
@@ -192,7 +192,7 @@ class ApiV1Test < ActionDispatch::IntegrationTest
       post '/api/v1/fields',
 
           email: 'kcarcia@cs.uml.edu',
-          password: '12345',
+          password: '12345678',
           field:
             {
               name: 'Field 1',
@@ -208,7 +208,7 @@ class ApiV1Test < ActionDispatch::IntegrationTest
       post '/api/v1/fields',
 
           email: 'kcarcia@cs.uml.edu',
-          password: '12345',
+          password: '12345678',
           field:
             {
               name: 'pie',
@@ -232,7 +232,7 @@ class ApiV1Test < ActionDispatch::IntegrationTest
 
           title: 'Awesome Data',
           email: 'kcarcia@cs.uml.edu',
-          password: '12345',
+          password: '12345678',
           data:
             {
               '20' => ['1', '2', '3', '4', '5']
@@ -331,7 +331,7 @@ class ApiV1Test < ActionDispatch::IntegrationTest
     get "/api/v1/data_sets/#{dset_id}/edit",
 
         email: 'kcarcia@cs.uml.edu',
-        password: '12345',
+        password: '12345678',
         data:
           {
             '20' => ['5']
@@ -374,7 +374,7 @@ class ApiV1Test < ActionDispatch::IntegrationTest
 
          upload: file,
          email: 'kcarcia@cs.uml.edu',
-         password: '12345',
+         password: '12345678',
          type: 'project',
          id: @dessert_project.id
 
@@ -414,7 +414,7 @@ class ApiV1Test < ActionDispatch::IntegrationTest
     post '/api/v1/media_objects',
          upload: file,
          email: 'kcarcia@cs.uml.edu',
-         password: '12345',
+         password: '12345678',
          type: 'project',
          id: 3
 
@@ -429,7 +429,7 @@ class ApiV1Test < ActionDispatch::IntegrationTest
     post '/api/v1/media_objects',
          upload: file,
          email: 'kcarcia@cs.uml.edu',
-         password: '12345',
+         password: '12345678',
          type: 'user',
          id: 3
 
@@ -499,7 +499,7 @@ class ApiV1Test < ActionDispatch::IntegrationTest
   test 'get user info' do
     get '/api/v1/users/myInfo',
         email: 'kcarcia@cs.uml.edu',
-        password: '12345'
+        password: '12345678'
 
     assert_response :success
     assert keys_match(response, @user_keys), 'Keys are missing'
@@ -517,7 +517,7 @@ class ApiV1Test < ActionDispatch::IntegrationTest
     post '/api/v1/data_sets/append',
         id: 2,
         email: 'kcarcia@cs.uml.edu',
-        password: '12345'
+        password: '12345678'
     assert_response :not_found
   end
 
@@ -525,7 +525,7 @@ class ApiV1Test < ActionDispatch::IntegrationTest
     post '/api/v1/data_sets/append',
         id: @dessert_project.data_sets.first.id,
         email: 'kcarcia@cs.uml.edu',
-        password: '12345',
+        password: '12345678',
         data:
           {
             '20' => ['99', '100', '101'],
@@ -544,7 +544,7 @@ class ApiV1Test < ActionDispatch::IntegrationTest
     post '/api/v1/data_sets/append',
         id: @dessert_project.data_sets.first.id,
         email: 'kcarcia@cs.uml.edu',
-        password: '12345',
+        password: '12345678',
         data:
           {
             '20' => ['blue', '100', '101'],

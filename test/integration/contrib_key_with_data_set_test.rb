@@ -13,7 +13,7 @@ class ContribKeyWithDataSetTest < ActionDispatch::IntegrationTest
   end
 
   test 'website_and_API' do
-    login('kcarcia@cs.uml.edu', '12345')
+    login('kcarcia@cs.uml.edu', '12345678')
     visit '/'
     click_on 'Projects'
     find('#project_title').set('Contributor Key Test Project')

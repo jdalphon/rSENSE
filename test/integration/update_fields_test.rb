@@ -13,7 +13,7 @@ class UpdateFieldsTest < ActionDispatch::IntegrationTest
   end
 
   test 'edit fields' do
-    login('kcarcia@cs.uml.edu', '12345')
+    login('kcarcia@cs.uml.edu', '12345678')
     click_on 'Projects'
     find('#project_title').set('Fields Test')
     click_on 'Create Project'
@@ -50,7 +50,7 @@ class UpdateFieldsTest < ActionDispatch::IntegrationTest
   end
 
   test 'template fields with dataset' do
-    login('kcarcia@cs.uml.edu', '12345')
+    login('kcarcia@cs.uml.edu', '12345678')
     click_on 'Projects'
     find('#project_title').set('Template Fields Test')
     click_on 'Create Project'
@@ -72,7 +72,7 @@ class UpdateFieldsTest < ActionDispatch::IntegrationTest
   end
 
   test 'teplate fields without dataset' do
-    login('kcarcia@cs.uml.edu', '12345')
+    login('kcarcia@cs.uml.edu', '12345678')
     click_on 'Projects'
     find('#project_title').set('Template Fields Test 2')
     click_on 'Create Project'

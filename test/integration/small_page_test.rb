@@ -15,7 +15,7 @@ class SmallPageTest < ActionDispatch::IntegrationTest
   end
 
   test 'only first paragraph' do
-    login('nixon@whitehouse.gov', '12345')
+    login('nixon@whitehouse.gov', '12345678')
     page.driver.resize_window(900, 500)
     visit '/'
     assert page.has_no_content?('Second Paragraph'), 'Second paragraph should not be shown.'

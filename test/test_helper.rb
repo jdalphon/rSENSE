@@ -79,14 +79,15 @@ module CapyHelper
     find('.navbar').click_on('Login')
     fill_in 'Email', with: email
     fill_in 'Password', with: pass
-    find('.mainContent').click_on('Login')
+    find('.mainContent').click_on('Log in')
 
-    assert page.has_content?('Logout'), 'Successfully logged in.'
+    assert page.has_content?('Signed in successfully.'), 'Failed to log in.'
   end
 
   def logout
     visit '/'
     find('.navbar').click_on('Logout')
+    assert page.has_content?('Signed out successfully.')
   end
 
   def finish

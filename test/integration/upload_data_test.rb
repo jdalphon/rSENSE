@@ -16,7 +16,7 @@ class UploadDataTest < ActionDispatch::IntegrationTest
   end
 
   test 'upload csv' do
-    login('kcarcia@cs.uml.edu', '12345')
+    login('kcarcia@cs.uml.edu', '12345678')
     visit project_path(@project)
     assert page.has_content?('Upload Test'), 'Not on project page.'
 
@@ -30,7 +30,7 @@ class UploadDataTest < ActionDispatch::IntegrationTest
   end
 
   test 'upload gpx' do
-    login('kcarcia@cs.uml.edu', '12345')
+    login('kcarcia@cs.uml.edu', '12345678')
     visit project_path(@project)
     assert page.has_content?('Upload Test'), 'Not on project page.'
 
@@ -47,7 +47,7 @@ class UploadDataTest < ActionDispatch::IntegrationTest
   end
 
   test 'upload ods' do
-    login('kcarcia@cs.uml.edu', '12345')
+    login('kcarcia@cs.uml.edu', '12345678')
     visit project_path(@project)
     assert page.has_content?('Upload Test'), 'Not on project page.'
 
@@ -62,7 +62,7 @@ class UploadDataTest < ActionDispatch::IntegrationTest
   end
 
   test 'upload xls' do
-    login('kcarcia@cs.uml.edu', '12345')
+    login('kcarcia@cs.uml.edu', '12345678')
     visit project_path(@project)
     assert page.has_content?('Upload Test'), 'Not on project page.'
 
@@ -77,7 +77,7 @@ class UploadDataTest < ActionDispatch::IntegrationTest
   end
 
   test 'upload xlsx' do
-    login('kcarcia@cs.uml.edu', '12345')
+    login('kcarcia@cs.uml.edu', '12345678')
     visit project_path(@project)
     assert page.has_content?('Upload Test'), 'Not on project page.'
 
@@ -92,7 +92,7 @@ class UploadDataTest < ActionDispatch::IntegrationTest
   end
 
   test 'invalid csv (two lat fields)' do
-    login('kcarcia@cs.uml.edu', '12345')
+    login('kcarcia@cs.uml.edu', '12345678')
     visit project_path(@project)
     assert page.has_content?('Upload Test'), 'Not on project page.'
 
@@ -105,7 +105,7 @@ class UploadDataTest < ActionDispatch::IntegrationTest
   end
 
   test 'link google doc' do
-    login('kcarcia@cs.uml.edu', '12345')
+    login('kcarcia@cs.uml.edu', '12345678')
     visit project_path(@project)
     assert page.has_content?('Upload Test'), 'Not on project page.'
 
@@ -120,7 +120,7 @@ class UploadDataTest < ActionDispatch::IntegrationTest
   end
 
   test 'unreadable file' do
-    login('kcarcia@cs.uml.edu', '12345')
+    login('kcarcia@cs.uml.edu', '12345678')
     visit project_path(@project)
     assert page.has_content?('Upload Test'), 'Not on project page.'
 
@@ -132,7 +132,7 @@ class UploadDataTest < ActionDispatch::IntegrationTest
   end
 
   test 'edit data set' do
-    login('kcarcia@cs.uml.edu', '12345')
+    login('kcarcia@cs.uml.edu', '12345678')
     visit project_path(@project)
     assert page.has_content?('Upload Test'), 'Not on project page.'
 
@@ -153,7 +153,7 @@ class UploadDataTest < ActionDispatch::IntegrationTest
   end
 
   test 'upload with key' do
-    login('kcarcia@cs.uml.edu', '12345')
+    login('kcarcia@cs.uml.edu', '12345678')
     visit project_path(@project)
     # Add a student key
     find('#edit-project-button').click

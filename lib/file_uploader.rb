@@ -1,6 +1,5 @@
 # File upload functions
 require 'csv'
-require 'roo'
 require 'open-uri'
 require 'fileutils'
 

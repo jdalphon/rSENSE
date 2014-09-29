@@ -13,7 +13,7 @@ class MakeProjectTest < ActionDispatch::IntegrationTest
   end
 
   test 'kate makes a new project' do
-    login('kcarcia@cs.uml.edu', '12345')
+    login('kcarcia@cs.uml.edu', '12345678')
 
     # Add a project
     click_on 'Projects'

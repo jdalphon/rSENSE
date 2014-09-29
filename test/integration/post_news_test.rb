@@ -19,7 +19,7 @@ class PostNewsTest < ActionDispatch::IntegrationTest
   end
 
   test 'add a news item' do
-    login('nixon@whitehouse.gov', '12345')
+    login('nixon@whitehouse.gov', '12345678')
 
     click_on 'News'
     assert page.has_no_content?('New news item #1'), 'News item should not exist'
@@ -30,20 +30,20 @@ class PostNewsTest < ActionDispatch::IntegrationTest
 
     logout
     visit '/'
-    login('kcarcia@cs.uml.edu', '12345')
+    login('kcarcia@cs.uml.edu', '12345678')
     click_on 'News'
     assert page.has_no_content?('New news item #1'), 'News was not published, should not be shown.'
 
   end
 
   test 'publish news' do
-    login('kcarcia@cs.uml.edu', '12345')
+    login('kcarcia@cs.uml.edu', '12345678')
     click_on 'News'
     assert page.has_no_content?('Unpublished News'), 'News was not published, should not be shown.'
 
     logout
     visit '/'
-    login('nixon@whitehouse.gov', '12345')
+    login('nixon@whitehouse.gov', '12345678')
     visit news_path(@unpublished)
     assert page.has_content?('Unpublished News'), 'Not on the news page'
 
@@ -52,13 +52,13 @@ class PostNewsTest < ActionDispatch::IntegrationTest
 
     logout
     visit '/'
-    login('kcarcia@cs.uml.edu', '12345')
+    login('kcarcia@cs.uml.edu', '12345678')
     click_on 'News'
     assert page.has_content?('Unpublished News'), 'News was published, should be shown.'
   end
 
   test 'rename news' do
-    login('nixon@whitehouse.gov', '12345')
+    login('nixon@whitehouse.gov', '12345678')
     visit news_path(@to_rename)
     assert page.has_content?('To be renamed'), 'Not on the right page'
 
@@ -72,7 +72,7 @@ class PostNewsTest < ActionDispatch::IntegrationTest
   end
 
   test 'delete news' do
-    login('nixon@whitehouse.gov', '12345')
+    login('nixon@whitehouse.gov', '12345678')
     visit news_path(@to_delete)
     assert page.has_content?('To be deleted'), 'Not on the right page'
 
@@ -84,7 +84,7 @@ class PostNewsTest < ActionDispatch::IntegrationTest
   end
 
   test 'add summary to news' do
-    login('nixon@whitehouse.gov', '12345')
+    login('nixon@whitehouse.gov', '12345678')
     visit news_path(@to_update)
     assert page.has_content?('To be updated'), 'Not on the right page'
 

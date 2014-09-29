@@ -17,7 +17,7 @@ class ManualEntryTest < ActionDispatch::IntegrationTest
   end
 
   test 'manual entry of datasets' do
-    login('kcarcia@cs.uml.edu', '12345')
+    login('kcarcia@cs.uml.edu', '12345678')
     visit('/')
     click_on 'Projects'
     click_on 'Dessert is Delicious'

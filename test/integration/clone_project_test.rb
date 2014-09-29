@@ -19,7 +19,7 @@ class CloneProjectTest < ActionDispatch::IntegrationTest
   # Note, currectly does not verify data is cloned correct, just that the sets are cloned
   test 'nixon clones kates project' do
     # #############SETUP#############
-    login('kcarcia@cs.uml.edu', '12345')
+    login('kcarcia@cs.uml.edu', '12345678')
 
     click_on 'Projects'
 
@@ -52,7 +52,7 @@ class CloneProjectTest < ActionDispatch::IntegrationTest
 
     logout
     # ###########CLONE###############
-    login 'nixon@whitehouse.gov', '12345'
+    login 'nixon@whitehouse.gov', '12345678'
 
     click_on 'Projects'
 

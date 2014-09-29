@@ -13,13 +13,13 @@ class TutorialsTest < ActionDispatch::IntegrationTest
   end
 
   test 'create a tutorial' do
-    login('kcarcia@cs.uml.edu', '12345')
+    login('kcarcia@cs.uml.edu', '12345678')
     click_on 'Tutorials'
     click_on 'See All Tutorials'
     assert page.has_no_content?('Create Tutorial'), 'Non-Admin should not be able to create a tutorial'
     logout
 
-    login('nixon@whitehouse.gov', '12345')
+    login('nixon@whitehouse.gov', '12345678')
     visit '/tutorials'
     assert page.has_content?('Create Tutorial'), 'Admin should be able to create a tutorial'
 

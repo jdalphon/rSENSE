@@ -130,7 +130,7 @@ class UsersController < ApplicationController
   # POST /users
   # POST /users.json
   def create
-    Rails.logger.error "-0-0-0-0-0-0-0-0-0-0-0-0-0-"
+    Rails.logger.error '-0-0-0-0-0-0-0-0-0-0-0-0-0-'
     @user = User.new(user_params)
     @user.reset_validation!
 
