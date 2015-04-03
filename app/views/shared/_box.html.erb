@@ -1,12 +1,15 @@
-<div class="col-lg-<%=width%> box-container">
-  <div class="box-header text-center">
-    <%= truncate(title, length: 20) %>
+<% if should_hide == false %>
+  <div class="col-lg-<%=width%>" style="padding-top:5px;">
+    <div class="panel panel-default shadow-z-3" style="border-radius: 0px; border: 1px solid gray">
+      <div class="panel-heading" style="background-color: <%= defined?(bg_color) ? bg_color : '' %>; border-top-left-radius: 0px; border-top-right-radius:0px;">
+        <h3><%= truncate(title, length: 20) %></h3>
+      </div>
+      <div class="panel-body">
+        <%= yield %>
+      </div>
+    </div>
   </div>
-  <div class="box-content">
-    <%= yield %>
-    <div class="clearfix"></div>
-  </div>
-  <div class="box-slider text-center">
-    <i class="icon-chevron-up"></i>
-  </div>
-</div>
+<% end %>
+
+  
+    

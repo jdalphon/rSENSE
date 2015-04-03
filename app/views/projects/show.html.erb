@@ -88,12 +88,13 @@
       </div>
     </div>
     <div class= "row">
-      <%= render layout: "shared/box", locals: {title: 'Description', width: '12', unique_id: 'description', should_hide: false} do %>
+      <%= render layout: "shared/box", locals: {title: 'Description', width: '12', unique_id: 'description', 
+         should_hide: (@project.content == '' && @cur_user != @project.owner), bg_color: '#B2EBF2' } do %>
         <%= content_helper(@project) %>
       <% end %>
     </div>
     <div class="row">
-      <%= render layout: "shared/box", locals: {title: 'Data Sets', width: '12', unique_id: 'data_sets', should_hide: false} do %>
+      <%= render layout: "shared/box", locals: {title: 'Data Sets', width: '12', unique_id: 'data_sets', should_hide: false, bg_color: '#B2EBF2'} do %>
         <% if @data_sets.count != 0 %>
           <div id="dataset_list">
             <span>
@@ -187,7 +188,7 @@
   <!-- Right hand column -->
   <div class="col-md-5">
     <div class="row">
-      <%= render layout: "shared/box", locals: {title: 'Fields', width: '12', unique_id: 'fields', should_hide: false} do %>
+      <%= render layout: "shared/box", locals: {title: 'Fields', width: '12', unique_id: 'fields', should_hide: false, bg_color: '#B2EBF2'} do %>
         <% if (@project.fields.count == 0) && can_edit?(@project) %>
           <div class="col-md-12 center">
             <a href="/projects/<%= @project.id %>/edit_fields">
@@ -226,7 +227,7 @@
       <% end %>
     </div>
     <div class="row">
-      <%=render layout: "shared/box", locals: {title: 'Contribute Data', width:'12', unique_id: 'create_data_set', should_hide: !(@project.fields.count() > 0)} do %>
+      <%=render layout: "shared/box", locals: {title: 'Contribute Data', width:'12', unique_id: 'create_data_set', should_hide: !(@project.fields.count() > 0), bg_color: '#B2EBF2'} do %>
         <% if ((can_edit?(@project) || can_contribute?(@project)) and @project.fields.count > 0) %>
           <div class="row-fluid">
             <div class="col-md-4 center">
@@ -282,13 +283,13 @@
     </div>
     <div class="row">
       <!-- ##### MEDIA OBJECTS MENU ##### -->
-      <%= render layout: "shared/box", locals: {title: 'Media', width: '12', unique_id: 'media', should_hide: false} do %>
+      <%= render layout: "shared/box", locals: {title: 'Media', width: '12', unique_id: 'media', should_hide: false, bg_color: '#B2EBF2'} do %>
         <%= render "shared/media_objects_view", {type: 'project', object: @project} %>
       <% end %>
     </div>
     <div class="row">
       <!-- ##### SAVED VISUALIZATIONS MENU ##### -->
-      <%=render layout: "shared/box", locals: {title: 'Visualizations', width: '12', unique_id: 'visualizations', should_hide: false} do %>
+      <%=render layout: "shared/box", locals: {title: 'Visualizations', width: '12', unique_id: 'visualizations', should_hide: false, bg_color: '#B2EBF2'} do %>
         <div id="viz_list" <% if @project.visualizations.count == 0 %> style="display:none;" <% end %> >
           <table id="viz_table" class="table table-striped">
             <thead>
