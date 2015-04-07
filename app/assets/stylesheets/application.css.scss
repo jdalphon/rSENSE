@@ -26,9 +26,11 @@ $navbar-default-link-hover-color: #DDDDDD;
 $table-bg-accent: #E8E8E8;
 @import "bootstrap-sprockets";
 @import "bootstrap";
-
+@import url(//fonts.googleapis.com/css?family=Noto+Sans:400,700,400italic,700italic&subset=latin,latin-ext);
+ 
 body {
   background-color: white;
+  font-family: 'Noto Sans', sans-serif;
 }
 
 .box-content {
@@ -279,7 +281,14 @@ body {
   max-width: 45%;
 }
 
-.shadow-z-3 {
-    box-shadow: 0 10px 20px rgba(0,0,0, .19),
-        0 6px 6px rgba(0,0,0, .23) ;
+.shadow-z-2 {
+  box-shadow: 2px 3px 1px grey;
+}
+
+.panel, .panel-default{
+  border-radius: 0px;
+  
+  .panel-heading{
+    background-color: #E1EAF1;
+  }
 }

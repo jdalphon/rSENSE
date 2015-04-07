@@ -1,100 +1,15 @@
 <div class="row hidden-print">
   <!-- Left hand column -->
   <div class="col-md-7">
-    <div class="row">
-      <!-- Project title -->
-      <div class="col-sm-12" style="margin-left:0px">
-        <div class="project_info_box" >
-          <div class="row">
-            <div class="col-sm-12">
-              <div id="title_div" class="word-break" style="font-size:1.5em">
-                <%= project_edit_helper "title", (can_edit? @project), false %>
-              </div>
-            </div>
-            <div class="col-sm-12">
-              <div class="info_label" style="font-size:1.1em">
-                by: <%= link_to @project.owner.name, user_path(@project.owner) %>
-                (<%= time_ago_in_words(@project.created_at) %> ago)
-              </div>
-              <br/>
-            </div>
-            <div class="col-sm-12">
-              <div id="notices">
-                <span id="lock_notice"
-                      <% if !@project.lock%>style="display:none" <% end %>>
-                  <i class="icon-lock"> This project is locked</i>
-                </span>
-                <span id="hidden_notice"
-                      <% if !@project.hidden%>style="display:none"<% end %>>
-                  <i class="icon-eye-close"> This project is hidden</i>
-                </span>
-                <span id="id_notice"
-                      <% if @project.hidden || @project.lock%>
-                      style="display:none"<% end %>>
-                  Project #: <%= @project.id %>
-                </span>
-              </div>
-            </div>
-            <div class="col-sm-12">
-              <% if !@cloned_project.nil? and !is_deleted?(@cloned_project) %>
-                <span class="info_label" style="font-size:1.1em">
-                  <%= 'Cloned From: ' %>
-                </span>
-                <%= link_to @cloned_project.title.html_safe,
-                    project_path(@cloned_project.id) %>
-                <br/>
-              <% end %>
-            </div>
-          </div>
-          <div class="row project_buttons">
-            <div class="col-sm-3">
-              <button type="button" class="btn btn-default" disabled>
-                <i class="fa fa-eye"> Views | </i> <%= @project.views %>
-              </button>
-            </div>
-            <div class="col-sm-3">
-              <div class="btn-group likes" data-project_id="<%= @project.id%>">
-                <% if @cur_user.try(:id) %>
-                  <button type="button" class="btn btn-default liked_status <% if @liked_by_cur_user%>active<%end%>" data-toggle="button"><i class="fa fa-thumbs-up"></i> Like</button>
-                  <button type="button" class="btn btn-default like_display" disabled> <%= @project.likes.count %></button>
-                <% end %>
-              </div>
-            </div>
-            <div class="col-sm-2">
-              <button type="button" class="btn btn-default" id="print">
-                <i class="fa fa-print"></i> Print
-              </button>
-            </div>
-            <% if @cur_user.try(:id) %>
-              <div class="col-xs-2">
-                <a href = "/projects/<%= @project.id %>/clone">
-                  <button type="button" class="btn btn-success">
-                    <i class="fa fa-copy"></i> Clone
-                  </button>
-                </a>
-              </div>
-            <% end %>
-            <% if can_edit? @project %>
-              <div class="col-xs-2">
-                <a href = "/projects/<%= @project.id %>/edit">
-                  <button type="button" class="btn btn-primary" id="edit-project-button">
-                    <i class="fa fa-cog"></i> Edit
-                  </button>
-                </a>
-              </div>
-            <% end %>
-          </div>
-        </div>
-      </div>
-    </div>
+    <%= render 'projects/show_heading' %>
     <div class= "row">
       <%= render layout: "shared/box", locals: {title: 'Description', width: '12', unique_id: 'description', 
-         should_hide: (@project.content == '' && @cur_user != @project.owner), bg_color: '#B2EBF2' } do %>
+         should_hide: (@project.content == '' && @cur_user != @project.owner) } do %>
         <%= content_helper(@project) %>
       <% end %>
     </div>
     <div class="row">
-      <%= render layout: "shared/box", locals: {title: 'Data Sets', width: '12', unique_id: 'data_sets', should_hide: false, bg_color: '#B2EBF2'} do %>
+      <%= render layout: "shared/box", locals: {title: 'Data Sets', width: '12', unique_id: 'data_sets', should_hide: false} do %>
         <% if @data_sets.count != 0 %>
           <div id="dataset_list">
             <span>
@@ -188,7 +103,7 @@
   <!-- Right hand column -->
   <div class="col-md-5">
     <div class="row">
-      <%= render layout: "shared/box", locals: {title: 'Fields', width: '12', unique_id: 'fields', should_hide: false, bg_color: '#B2EBF2'} do %>
+      <%= render layout: "shared/box", locals: {title: 'Fields', width: '12', unique_id: 'fields', should_hide: false} do %>
         <% if (@project.fields.count == 0) && can_edit?(@project) %>
           <div class="col-md-12 center">
             <a href="/projects/<%= @project.id %>/edit_fields">
@@ -227,7 +142,7 @@
       <% end %>
     </div>
     <div class="row">
-      <%=render layout: "shared/box", locals: {title: 'Contribute Data', width:'12', unique_id: 'create_data_set', should_hide: !(@project.fields.count() > 0), bg_color: '#B2EBF2'} do %>
+      <%=render layout: "shared/box", locals: {title: 'Contribute Data', width:'12', unique_id: 'create_data_set', should_hide: !(@project.fields.count() > 0)} do %>
         <% if ((can_edit?(@project) || can_contribute?(@project)) and @project.fields.count > 0) %>
           <div class="row-fluid">
             <div class="col-md-4 center">
@@ -283,13 +198,13 @@
     </div>
     <div class="row">
       <!-- ##### MEDIA OBJECTS MENU ##### -->
-      <%= render layout: "shared/box", locals: {title: 'Media', width: '12', unique_id: 'media', should_hide: false, bg_color: '#B2EBF2'} do %>
+      <%= render layout: "shared/box", locals: {title: 'Media', width: '12', unique_id: 'media', should_hide: false} do %>
         <%= render "shared/media_objects_view", {type: 'project', object: @project} %>
       <% end %>
     </div>
     <div class="row">
       <!-- ##### SAVED VISUALIZATIONS MENU ##### -->
-      <%=render layout: "shared/box", locals: {title: 'Visualizations', width: '12', unique_id: 'visualizations', should_hide: false, bg_color: '#B2EBF2'} do %>
+      <%=render layout: "shared/box", locals: {title: 'Visualizations', width: '12', unique_id: 'visualizations', should_hide: false} do %>
         <div id="viz_list" <% if @project.visualizations.count == 0 %> style="display:none;" <% end %> >
           <table id="viz_table" class="table table-striped">
             <thead>
