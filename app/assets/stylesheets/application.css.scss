@@ -19,7 +19,7 @@
  *= require_self
  */
 
-$navbar-default-bg: #111133;
+$navbar-default-bg: #0F2C6A;
 $navbar-default-color: white;
 $navbar-default-link-color: white;
 $navbar-default-link-hover-color: #DDDDDD;
@@ -28,7 +28,7 @@ $table-bg-accent: #E8E8E8;
 @import "bootstrap";
 
 body {
-  background-color: #ddd;
+  background-color: white;
 }
 
 .box-content {
@@ -70,6 +70,7 @@ body {
 
 .footer{
   font-size: smaller;
+  background-color: #E1EAF1;
   
   .category{
     border-bottom: 1px solid gray; 
@@ -81,7 +82,7 @@ body {
 }
 
 .item {
-  background-color: #ddd;
+  background-color: #E1EAF1;
   margin: auto;
   box-shadow: 2px 3px 1px grey;
 
@@ -171,17 +172,17 @@ body {
 }
 
 .mainContent {
-  background-color: #fff;
-  box-shadow: 0px 0px 20px grey;
+  background-color: white;
+/*   box-shadow: 0px 0px 20px grey; */
   padding: 18px 20px 18px 20px;
   min-height: 100%;
 }
 
 .navbar {
-  box-shadow: 0px 0px 10px black;
+
   border-bottom: 1px solid black;
   margin-bottom: 0px;
-  background-color: #113;
+  background-color: #0F2C6A;
   height: 55px;
 
   // larger font sizes cause weird overflow errors on some names
@@ -214,9 +215,9 @@ body {
 }
 
 .search-box {
-  background-color: #ddd;
-  box-shadow: 2px 3px 1px grey;
+  background-color: #E1EAF1;
   padding: 2em;
+  box-shadow: 2px 3px 1px grey;
   margin-bottom: 2ex;
 }
 
