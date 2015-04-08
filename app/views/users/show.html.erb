@@ -1,27 +1,40 @@
-<div class="row" style="background-color:lightgreen">
-  <div class="col-xs-5 col-sm-3 col-md-2" style="padding-left:0px">
+<div class="row" style="background-color:#E1EAF1">
+  <div class="col-xs-4 col-sm-3 col-md-2" style="padding-left:0px">
     <%= image_tag Gravatar.new.url(@user), style: "border-radius: 3px", class: "gravatar_img" %>
   </div>
-  <div class="col-xs-7 col-sm-9 col-md-10">
-      <h2> <%= user_edit_helper 'name', can_edit?(@user), false %></h2>
-      <p>Member Since: <%= @user.created_at.strftime('%Y/%m/%d') %></p>
+  <div class="col-xs-4 col-sm-6 col-md-4">
+    <h2> <%= user_edit_helper 'name', can_edit?(@user), false %></h2>
+    <p>Member Since: <%= @user.created_at.strftime('%Y/%m/%d') %></p>
+    <div class="row">
+    <%= form_for(@user, html: {method: :get}) do %>
+      <div class="col-xs-8">
+        <%= text_field_tag :search, @search,
+          class: "form-control",
+          placeholder: "Enter keyword(s) to search for" %>
+      </div>
+      <div class="col-xs-2">
+        <%= submit_tag("Search", class: "btn btn-default") %>
+      </div>
+    <% end %>
+    </div>
   </div>
+  
 </div>  
   
 <div class="row">
   <div class="col-xs-12">
     <h3><i class="fa fa-folder-open"></i> Projects</h3>
-    <% @user.projects.last(4).each do |project|%>
+    <% @contributions["projects"].each do |project|%>
       <% @box_project = project %>
       <%= render "shared/project_box" %>
     <% end %>
   </div>
 </div>
-  
+<hr/>
 <div class="row">
   <div class="col-xs-12">
   <h3><i class="fa fa-picture-o"></i> Visualizations</h3>
-    <% @user.visualizations.last(4).each do |visualization|%>
+    <% @contributions['visualizations'].each do |visualization|%>
       <% @box_vis = visualization %>
       <%= render "shared/vis_box" %>
     <% end %>

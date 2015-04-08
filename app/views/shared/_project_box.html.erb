@@ -3,7 +3,8 @@
 <div class="col-xs-12 col-sm-4 col-md-3 col-lg-3">
   <div class='item item-block
     <%= (defined? @box_project_front_page) ? "front_page_item" : "" %>'>
-   
+    
+    <!-- Top half of item -->
     <% if has_img %>
       <% bg_image = MediaObject.find(@box_project.featured_media_id).src %>   
       <a href="<%= project_path @box_project %>">
@@ -19,7 +20,7 @@
       </a>
     <% end %>
     
- 
+    <!-- Bottom half of item -->
     <div class="item-desc">
         <div class="item-title word-wrap"> 
           <% if has_img %>
@@ -38,18 +39,18 @@
     </div>
     <div class="item-badges">
       <div>
-        <span class="badge" title="Data Sets">
+        <span class="badge col-xs-2 col-xs-offset-1" title="Data Sets">
           <i class="fa fa-flask">&nbsp;</i><%= @box_project.data_sets.count %>
         </span>
       </div>
       <div>
-        <span class="badge" title="Views" >
+        <span class="badge col-xs-2" title="Views" >
           <i class="fa fa-eye">&nbsp;</i>
           <%= @box_project.views %>
         </span>
       </div>
       <div>
-        <span class="badge" title="Likes" >
+        <span class="badge col-xs-2" title="Likes" >
           <i class="fa fa-thumbs-up">&nbsp;</i>
           <%= @box_project.likes.count %>
         </span>

@@ -38,16 +38,23 @@ class UsersController < ApplicationController
   # GET /users/1.json
   def show
     @user = User.find_by_id(params[:id])
-
+       
     if @user.nil?
       respond_to do |format|
         format.html { render file: "#{Rails.root}/public/404.html", status: :not_found }
         format.json { render json: {}, status: :unprocessable_entity }
       end
     else
-
-      recur = params.key?(:recur) ? params[:recur] == 'true' : false
+      @search = params[:search]
+      
       show_hidden = @cur_user.id == @user.id
+      
+      @contributions = {}
+
+      @contributions['projects'] = @user.projects.search(params[:search], show_hidden).last(4)
+      @contributions['visualizations'] = @user.visualizations.search(params[:search], show_hidden).last(4)
+      
+      recur = params.key?(:recur) ? params[:recur] == 'true' : false
 
       respond_to do |format|
         format.html { render status: :ok }
@@ -55,62 +62,7 @@ class UsersController < ApplicationController
       end
     end
   end
-
-  # GET /users/1/contributions
-  # GET /users/1.json
-  def contributions
-    @user = User.find(params[:id])
-
-    # See if we are only looking for specific contributions
-    @filter = params[:filters].to_s.downcase
-
-    if params[:page_size].nil?
-      page_size = 10
-    else
-      page_size = params[:page_size].to_i
-    end
-
-    show_hidden = (@cur_user.id == @user.id) || can_admin?(@user)
-
-    @contributions = []
-
-    case @filter
-    when 'my projects'
-      @contributions = @user.projects.search(params[:search], show_hidden)
-    when 'data sets'
-      @contributions = @user.data_sets.search(params[:search])
-    when 'visualizations'
-      @contributions = @user.visualizations.search(params[:search], show_hidden)
-    when 'liked projects'
-      @contributions = []
-      @user.likes.each do |like|
-        y = Project.where('(lower(title) LIKE lower(?)) AND (id = ?)', "%#{params[:search]}%",
-                          like.project_id).first || next
-        next if y.hidden == true && !can_edit?(y)
-        @contributions << y
-      end
-    end
-
-    page = params[:page].to_i
-
-    if @contributions.length == 0
-      @total_pages = 0
-    else
-      @total_pages = (@contributions.length / page_size).ceil + 1
-    end
-
-    @last_page = false
-    if page + 1 == @total_pages.to_i
-      @last_page = true
-    end
-
-    @contributions = @contributions[page * page_size..(page * page_size) + (page_size - 1)]
-
-    respond_to do |format|
-      format.html { render partial: 'display_contributions' }
-    end
-  end
-
+ 
   # GET /users/new
   # GET /users/new.json
   def new
