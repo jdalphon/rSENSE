@@ -3,6 +3,8 @@
   window.is_admin = <%= is_admin? %>
 </script>
 
+<h1><i class="fa fa-book"></i> News</h1>
+
 <% if is_admin? %>
   <div class="row">
     <%= form_for @new_news do |ff| %>
@@ -22,7 +24,9 @@
 
 <div class="row">
   <% @news.each do |n| %>
-    <%= render 'shared/article_box', {image_id: n.featured_media_id, path: news_path(n), title: n.title.html_safe,
-      brief: n.summary, content: n.content, date: n.created_at.strftime("%B %d %Y"), width: 12} %>
+    <div class="row">
+      <%= render 'shared/article_box', {image_id: n.featured_media_id, path: news_path(n), title: n.title.html_safe,
+        brief: n.summary, content: n.content, date: n.created_at.strftime("%B %d %Y"), width: 12} %>
+    </div><br/>
   <% end %>
 </div>

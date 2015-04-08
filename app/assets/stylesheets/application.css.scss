@@ -150,9 +150,6 @@ body {
     padding-top: 10px;
     text-align: center;
     width: 100%;
-    background: linear-gradient(rgba(221, 221, 211, 0),
-      rgba(221, 221, 221, 1) 45%,
-      rgba(221, 221, 221, 1));
   }
   .article_page_subtitle {
     height: 20px;
@@ -228,8 +225,8 @@ body {
 
 .search-box {
   background-color: #E1EAF1;
-  padding: 2em;
   box-shadow: 2px 3px 1px grey;
+  padding: 2em;
   margin-bottom: 2ex;
 }
 
