@@ -1,22 +1,30 @@
-<div class="row">
-  <div class="col-lg-12">
+<div class="row" style="background-color:lightgreen">
+  <div class="col-xs-5 col-sm-3 col-md-2" style="padding-left:0px">
+    <%= image_tag Gravatar.new.url(@user), style: "border-radius: 3px", class: "gravatar_img" %>
+  </div>
+  <div class="col-xs-7 col-sm-9 col-md-10">
       <h2> <%= user_edit_helper 'name', can_edit?(@user), false %></h2>
       <p>Member Since: <%= @user.created_at.strftime('%Y/%m/%d') %></p>
   </div>
-
-  <%= render layout: "shared/box", locals: {title: 'Projects', width: '12', unique_id: 'my_projects', should_hide: @user.projects.count == 0} do %>
+</div>  
+  
+<div class="row">
+  <div class="col-xs-12">
+    <h3><i class="fa fa-folder-open"></i> Projects</h3>
     <% @user.projects.last(4).each do |project|%>
       <% @box_project = project %>
       <%= render "shared/project_box" %>
     <% end %>
-  <% end %>
+  </div>
+</div>
   
-  <%= render layout: "shared/box", locals: {title: 'Visualizations', width: '12', unique_id: 'my_visualizations', should_hide: @user.visualizations.count == 0} do %>
+<div class="row">
+  <div class="col-xs-12">
+  <h3><i class="fa fa-picture-o"></i> Visualizations</h3>
     <% @user.visualizations.last(4).each do |visualization|%>
       <% @box_vis = visualization %>
       <%= render "shared/vis_box" %>
     <% end %>
-  <% end %>
+  </div>
 </div>
-
 
