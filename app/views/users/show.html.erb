@@ -1,70 +1,22 @@
 <div class="row">
-  <div class="col-lg-4">
-
-    <div class="row well" style="margin: 19px;">
-      <div class="col-lg-12 center">
-        <%= image_tag Gravatar.new.url(@user), style: "border-radius: 3px", class: "gravatar_img" %>
-      </div>
-      <div class="col-lg-12" style="padding-top:25px;">
-        <span class="info_label" style="line-height: 30px;">Display Name:</span><br>
-        <div class="full_width_edit" style="font-style:italic">
-          <%= user_edit_helper 'name', can_edit?(@user), false %>
-        </div>
-
-        <% if @cur_user.admin? or @cur_user.id == @user.id %>
-          <br />
-          <span class="info_label" style="line-height: 30px;">Email:</span><br>
-          <span class="full_width_edit" style="font-style: italic; font-weight: bold">
-            <%= @user.email %>
-          </span>
-
-          <p style="margin-top: 8px"><%= link_to "Change Email or Password", edit_user_path(@user) %></p>
-        <% end %>
-
-        <br />
-        <i>Joined <%= time_ago_in_words(@user.created_at)%> ago</i>
-        <br />
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="col-lg-12">
-        <%= render layout: "shared/box", locals: {title: 'Bio', width: '12', unique_id: 'box', should_hide: false } do %>
-          <%= content_helper(@user) %>
-        <%end%>
-      </div>
-    </div>
-
+  <div class="col-lg-12">
+      <h2> <%= user_edit_helper 'name', can_edit?(@user), false %></h2>
+      <p>Member Since: <%= @user.created_at.strftime('%Y/%m/%d') %></p>
   </div>
 
-  <div class="col-lg-8">
-    <%= form_tag users_path, method: 'get', id: 'contribution_search', "data-user-id" => @user.id do%>
-      <ul class="nav nav-tabs" id="user_filter">
-        <li class="active"><a href="#" title="Search through <%=@user.name%>'s projects">My Projects</a></li>
-        <li><a href="#" title="Search through <%=@user.name%>'s data sets">Data Sets</a></li>
-        <li><a href="#" title="Search through <%=@user.name%>'s visualizations">Visualizations</a></li>
-        <li><a href="#" title="Search through projects liked by <%=@user.name%>">Liked Projects</a></li>
-      </ul>
-
-      <div id="contributions_content">
-        <div id="searchUserRow" class="row">
-          <div class="col-lg-9">
-            <input class="form-search form-control" id="contributions_search" name="search" type="text">
-          </div>
-          <div class="col-lg-3">
-            <input type="button" class="btn btn-success" value="Search" id="contribution_search_btn" style="margin-left: 7px; margin-bottom: 10px;"/>
-          </div>
-        </div>
-
-        <%= hidden_field_tag "page", params[:page].to_i %>
-        <div id="contributions">
-        </div>
-        <div class="pageControls">
-          <a href="#" class="pagebck">&lt;&lt;</a>
-          <span id="pageLabel">Page 1 of 1</span>
-          <a href="#" class="pagefwd">&gt;&gt;</a>
-        </div>
-      </div>
+  <%= render layout: "shared/box", locals: {title: 'Projects', width: '12', unique_id: 'my_projects', should_hide: @user.projects.count == 0} do %>
+    <% @user.projects.last(4).each do |project|%>
+      <% @box_project = project %>
+      <%= render "shared/project_box" %>
     <% end %>
-  </div>
+  <% end %>
+  
+  <%= render layout: "shared/box", locals: {title: 'Visualizations', width: '12', unique_id: 'my_visualizations', should_hide: @user.visualizations.count == 0} do %>
+    <% @user.visualizations.last(4).each do |visualization|%>
+      <% @box_vis = visualization %>
+      <%= render "shared/vis_box" %>
+    <% end %>
+  <% end %>
 </div>
+
+
