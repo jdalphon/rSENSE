@@ -236,3 +236,41 @@ $ ->
     $.fn.carousel.defaults =
       interval: false,
       pause: 'hover'
+
+#Logging
+  if namespace.controller is 'visualizations' and
+  namespace.action in ['show']
+    #Quick and dirty get last time value in array.
+    Array.prototype.last_time = () ->
+      if this.length > 0
+        return this[this.length-1].time
+      else
+        return new Date().getTime()
+    
+    #Create the global logging object
+    globals.logging = 
+      start_time: new Date().getTime()
+      user_id: 1
+      clicks: new Array()
+    
+    #Add click event for clicks on anything with data-log-id set.
+    $('[data-log-id]').click (e) =>
+      
+      time = new Date().getTime()
+      target = $($(e)[0].target)
+      
+      #Create the clicks object
+      click =
+        time: time
+        offset_time: time - globals.logging.clicks.last_time()
+        log_id: target.data('log-id')
+        class_name: target.attr('class')
+        id_name: target.attr('id')
+        
+      #Add the new click to the log  
+      globals.logging['clicks'].push(click)
+      
+    $('#playback').click (e) ->
+      for click in globals.logging.clicks
+        setTimeout (-> $("[data-log-id=#{click.log_id}]").click()), click.offset_time
+      console.log globals.logging
