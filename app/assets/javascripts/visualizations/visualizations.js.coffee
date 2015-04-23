@@ -258,7 +258,7 @@ $ ->
       
       time = new Date().getTime()
       target = $($(e)[0].target)
-      
+
       #Create the clicks object
       click =
         time: time
@@ -267,31 +267,32 @@ $ ->
         class_name: target.attr('class')
         id_name: target.attr('id')
         submit_time: ''
-        
+      console.log click  
       #Add the new click to the log  
-      globals.logging['clicks'].push(click)
-      
-    run = (item) ->
-      item.click()
+      globals.logging['clicks'].push(click)    
 
-    $('#playback').click (e) ->
-      window.scrollTo(0,0)
-      alert('click to continue');
-      imported = $('#imported').data('imported')
-     
-      run = (index, max_index) =>
-        item = $("[data-log-id=#{imported.clicks[index].log_id}]")
-        item.click()
-        setTimeout(run, imported.clicks[index].offset_time, index+1, max_index)
-      run(0, imported.clicks.length)
+#     $('#playback').click (e) ->
+#       window.scrollTo(0,0)
+#       alert('click to continue');
+#       imported = $('#imported').data('imported')
+#      
+#       run = (index, max_index) =>
+#         item = $("[data-log-id=#{imported.clicks[index].log_id}]")
+#         item.click()
+#         setTimeout(run, imported.clicks[index].offset_time, index+1, max_index)
+#       run(0, imported.clicks.length)
 
-    $('#submit_logging').click (e) ->
-      e.preventDefault()
-      $('#log_data').val(JSON.stringify(globals.logging))
-      globals.logging.submit_time = new Date().getTime()
-      $('#logging_form').submit()
-      
+#     $('#submit_logging').click (e) ->
+#       e.preventDefault()
+#       $('#log_data').val(JSON.stringify(globals.logging))
+#       globals.logging.submit_time = new Date().getTime()
+#       $('#logging_form').submit()
+
+    #Clicks should be on whole div, not internal parts.
     $('.vis-ctrl-title, .vis-ctrl-icon').click (e) ->
-      e.preventDefault()
-      e.parents('div').click()
+      e.stopPropagation()
+      $(this).parents('div').click()
+    $('.vis-tab-child').click (e) ->
+      e.stopPropagation()
+      $(this).parents('a').click()
     

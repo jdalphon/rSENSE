@@ -47,10 +47,10 @@
          <% if @presentation || !titleBar %> style="display:none" <% end %>>
       <div class="inline-left">
         <button id="ctrls-menu-btn" class="hamburger-menu btn btn-default"
-                <% if !controls %> style="display:none" <% end %>>
-          <span class="hamburger-bar"></span>
-          <span class="hamburger-bar"></span>
-          <span class="hamburger-bar"></span>
+                <% if !controls %> style="display:none" <% end %>
+                data-log-id="tools-menu-button">
+          <i class="fa fa-bars"></i>
+        
         </button>
         <%= title.html_safe %>
         <span class="subtitle">
