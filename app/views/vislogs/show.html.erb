@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Data:</strong>
+  <%= @vislog.data %>
+</p>
+
+<p>
+  <strong>Visualization:</strong>
+  <%= @vislog.visualization_id %>
+</p>
+
+<p>
+  <strong>User:</strong>
+  <%= @vislog.user_id %>
+</p>
+
+<%= link_to 'Edit', edit_vislog_path(@vislog) %> |
+<%= link_to 'Back', vislogs_path %>

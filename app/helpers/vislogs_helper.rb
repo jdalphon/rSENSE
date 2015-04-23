@@ -1,0 +1,2 @@
+module VislogsHelper
+end

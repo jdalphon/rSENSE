@@ -1,0 +1,29 @@
+<%= form_for(@vislog) do |f| %>
+  <% if @vislog.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@vislog.errors.count, "error") %> prohibited this vislog from being saved:</h2>
+
+      <ul>
+      <% @vislog.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :data %><br>
+    <%= f.text_area :data %>
+  </div>
+  <div class="field">
+    <%= f.label :visualization_id %><br>
+    <%= f.number_field :visualization_id %>
+  </div>
+  <div class="field">
+    <%= f.label :user_id %><br>
+    <%= f.number_field :user_id %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

@@ -4,6 +4,10 @@
     titleBar: true,
     controls: true,
     getLatest: false } %>
+    
+<!-- This is the imported data. -->    
+<div id="imported" data-imported="<%=@log_data.data%>"></div>
+
 <div class="row" style="display:block; float:left">
   <div class="col-md-8">
     <div class="well" style="margin-top:10px" id="dataset_info">
@@ -23,6 +27,10 @@
     <% end %>
   </div>
   <div class="col-md-4">
+    <%= form_tag "/visualizations/#{@visualization.id}/save_logging", method: :post, id: 'logging_form' do %>
+      <%= submit_tag 'Finished', class: 'btn btn-primary', id: 'submit_logging'%>
+      <input type='hidden' name='log_data' id='log_data' />
+    <% end %>
     <div id="playback" class="btn btn-default">Playback</div>
   </div>
 </div>

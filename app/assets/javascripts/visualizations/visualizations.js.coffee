@@ -266,11 +266,32 @@ $ ->
         log_id: target.data('log-id')
         class_name: target.attr('class')
         id_name: target.attr('id')
+        submit_time: ''
         
       #Add the new click to the log  
       globals.logging['clicks'].push(click)
       
+    run = (item) ->
+      item.click()
+
     $('#playback').click (e) ->
-      for click in globals.logging.clicks
-        setTimeout (-> $("[data-log-id=#{click.log_id}]").click()), click.offset_time
-      console.log globals.logging
+      window.scrollTo(0,0)
+      alert('click to continue');
+      imported = $('#imported').data('imported')
+     
+      run = (index, max_index) =>
+        item = $("[data-log-id=#{imported.clicks[index].log_id}]")
+        item.click()
+        setTimeout(run, imported.clicks[index].offset_time, index+1, max_index)
+      run(0, imported.clicks.length)
+
+    $('#submit_logging').click (e) ->
+      e.preventDefault()
+      $('#log_data').val(JSON.stringify(globals.logging))
+      globals.logging.submit_time = new Date().getTime()
+      $('#logging_form').submit()
+      
+    $('.vis-ctrl-title, .vis-ctrl-icon').click (e) ->
+      e.preventDefault()
+      e.parents('div').click()
+    

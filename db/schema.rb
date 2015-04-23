@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150313212337) do
+ActiveRecord::Schema.define(version: 20150422173710) do
 
   create_table "contrib_keys", force: true do |t|
     t.string   "name",       null: false
@@ -132,6 +132,14 @@ ActiveRecord::Schema.define(version: 20150313212337) do
   create_table "view_counts", force: true do |t|
     t.integer  "project_id",             null: false
     t.integer  "count",      default: 0, null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "vislogs", force: true do |t|
+    t.text     "data"
+    t.integer  "visualization_id"
+    t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

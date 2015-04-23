@@ -54,7 +54,7 @@ class VisualizationsController < ApplicationController
       defaultVis:   tmp['defaultVis'],
       relVis:       tmp['relVis']
     }
-
+    @log_data = Vislog.first || Vislog.new
     recur = params.key?(:recur) ? params[:recur] == 'true' : false
 
     options = {}
@@ -348,6 +348,20 @@ class VisualizationsController < ApplicationController
     end
   end
 
+  def save_logging
+    visualization = Visualization.find(params[:id])
+    
+    v = Vislog.new({visualization_id: visualization.id, user_id: @cur_user.try(:id), data: params[:log_data]})
+    
+    if v.save()
+      flash[:notice] = "YAY!!"
+      redirect_to visualization
+    else
+      flash[:error] = v.errors.full_messages
+      redirect_to visualization
+    end
+  end
+  
   private
 
   def visualization_params

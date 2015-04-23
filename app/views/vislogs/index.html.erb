@@ -1,0 +1,29 @@
+<h1>Listing vislogs</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Data</th>
+      <th>Visualization</th>
+      <th>User</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @vislogs.each do |vislog| %>
+      <tr>
+        <td><%= vislog.data %></td>
+        <td><%= vislog.visualization_id %></td>
+        <td><%= vislog.user_id %></td>
+        <td><%= link_to 'Show', vislog %></td>
+        <td><%= link_to 'Edit', edit_vislog_path(vislog) %></td>
+        <td><%= link_to 'Destroy', vislog, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Vislog', new_vislog_path %>

@@ -1,4 +1,7 @@
 Rsense::Application.routes.draw do
+
+  resources :vislogs
+
   get 'testing/index'
 
   # See how all your routes lay out with "rake routes"
@@ -18,7 +21,8 @@ Rsense::Application.routes.draw do
   post '/projects/import/:pid' => 'projects#importFromIsense'
 
   resources :visualizations, except: [:new]
-
+  post '/visualizations/:id/save_logging' => 'visualizations#save_logging'
+  
   resources :data_sets
 
   resources :fields, except: [:index, :new, :edit]
