@@ -3,6 +3,7 @@
 // below. This is the bare minimum load order necessary pipeline to work.
 //
 //  Saved vises take precedence
+//= require ./logging
 //= require ./savedVis
 //
 // These two provide the foundation for baseVis
@@ -18,7 +19,7 @@
 // Scatter is the basis for Timeline
 //= require ./scatter
 //
-// All other vises must be included before runtime
+// All other vises must be included before runtime (visualizations.js.coffee)
 //= require ./map
 //= require ./timeline
 //= require ./bar

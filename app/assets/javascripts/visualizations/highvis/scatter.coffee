@@ -124,6 +124,17 @@ $ ->
             text: ""
           tooltip:
             formatter: ->
+              time = new Date().getTime()
+              if !playing
+                click =
+                  type: 'hover'
+                  time: time
+                  offset_time: time - logging.clicks.last_time()
+                  value:
+                    series: @series._i
+                    point: @point.index
+                  
+                logging['clicks'].push click
               if @series.name.regression?
                 str  = @series.name.regression.tooltip
               else

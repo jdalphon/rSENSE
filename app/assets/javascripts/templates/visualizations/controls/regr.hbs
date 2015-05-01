@@ -7,9 +7,11 @@
     <tr>
       <td><label for="regr-y-axis">Y Axis:</label></td>
       <td>
-        <select id="regr-y-axis" class="form-control regr-option">
+        <select id="regr-y-axis" 
+          class="form-control regr-option"
+          data-log-id="regression-yaxis-select">
           {{#each yFields}}
-            <option value="{{this.id}}">{{this.name}}</option>
+            <option value="{{this.id}}" data-log-id="{{this.name}}-yaxis-regression">{{this.name}}</option>
           {{/each}}
         </select>
       </td>
@@ -17,9 +19,11 @@
     <tr>
       <td><label for="regr-type">Type:</label></td>
       <td>
-        <select id="regr-type" class="form-control regr-option">
+        <select id="regr-type" 
+          class="form-control regr-option"
+          data-log-id="regression-type-select">
           {{#each regressions}}
-            <option value="{{@index}}">{{this}}</option>
+            <option value="{{@index}}" data-log-id="{{this}}-reg-type">{{this}}</option>
           {{/each}}
         </select>
       </td>

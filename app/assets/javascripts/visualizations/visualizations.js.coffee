@@ -237,9 +237,10 @@ $ ->
       interval: false,
       pause: 'hover'
 
-#Logging
-  if namespace.controller is 'visualizations' and
-  namespace.action in ['show']
+
+  #logging code
+  if namespace.controller is 'visualizations' and namespace.action in ['show']
+
     #Quick and dirty get last time value in array.
     Array.prototype.last_time = () ->
       if this.length > 0
@@ -247,52 +248,89 @@ $ ->
       else
         return new Date().getTime()
     
-    #Create the global logging object
-    globals.logging = 
-      start_time: new Date().getTime()
-      user_id: 1
-      clicks: new Array()
+    Array.prototype.next_offset_time = (index) ->
+      if this.length >= index
+        return this[index].offset_time
+      else
+        return 0
     
-    #Add click event for clicks on anything with data-log-id set.
-    $('[data-log-id]').click (e) =>
+    #Check if logging is turned on
+    if $('#should_log').data('should_log')
       
-      time = new Date().getTime()
-      target = $($(e)[0].target)
+      #Create the global logging object
+      window.logging = 
+        start_time: new Date().getTime()
+        user_id: 1
+        clicks: new Array()
+      window.playing = false
+      
+      #Global log event function
+      window.log_click_event = (e) ->
+  #       console.log e
+        if !playing
+          time = new Date().getTime()
+          target = $($(e)[0].target)
 
-      #Create the clicks object
-      click =
-        time: time
-        offset_time: time - globals.logging.clicks.last_time()
-        log_id: target.data('log-id')
-        class_name: target.attr('class')
-        id_name: target.attr('id')
-        submit_time: ''
-      console.log click  
-      #Add the new click to the log  
-      globals.logging['clicks'].push(click)    
+          #Create the clicks object
+          click =
+            time: time
+            offset_time: time - logging.clicks.last_time()
+            log_id: target.data('log-id')
+            class_name: target.attr('class')
+            id_name: target.attr('id')
+            submit_time: ''
+            type: e.type
+            value: if e.type == 'change' then Number.parseFloat(e.originalEvent.target.value) else ''
+          console.log click  
+          #Add the new click to the log  
+          logging['clicks'].push(click)    
+      
+      
+#       #Add click event for clicks on anything with data-log-id set.
+#       $('[data-log-id]').click (e) ->
+#         log_click_event(e)
+#       $('select').change (e) =>
+#         log_click_event(e)
+            
+        
+      $('#playback').click (e) ->
+        playing = true
+        window.scrollTo(0,0)
+        alert('click to continue');
+        imported = $('#imported_log_data').data('log_data')
+        run = (index, max_index) =>
+          item = $("[data-log-id=#{imported.clicks[index].log_id}]")
+          
+          type = imported.clicks[index].type
+          
+          if type == 'click'
+            item.click()
+          else if type == 'change'
+            value = imported.clicks[index].value
+            item.val(value)
+            item.change()
+          else if type == 'hover'
+            evt = imported.clicks[index]
+            series = evt.value.series
+            point = evt.value.point
+            globals.curVis.chart.series[evt.value.series].data[evt.value.point].setState('hover')
+            globals.curVis.chart.tooltip.refresh(globals.curVis.chart.series[series].data[point])
+          setTimeout(run, imported.clicks.next_offset_time(index), index+1, max_index)
+        run(0, imported.clicks.length)
 
-#     $('#playback').click (e) ->
-#       window.scrollTo(0,0)
-#       alert('click to continue');
-#       imported = $('#imported').data('imported')
-#      
-#       run = (index, max_index) =>
-#         item = $("[data-log-id=#{imported.clicks[index].log_id}]")
-#         item.click()
-#         setTimeout(run, imported.clicks[index].offset_time, index+1, max_index)
-#       run(0, imported.clicks.length)
+      $('#submit_logging').click (e) ->
+        e.preventDefault()
+        $('#log_data').val(JSON.stringify(logging))
+        logging.submit_time = new Date().getTime()
+        $('#logging_form').submit()
 
-#     $('#submit_logging').click (e) ->
-#       e.preventDefault()
-#       $('#log_data').val(JSON.stringify(globals.logging))
-#       globals.logging.submit_time = new Date().getTime()
-#       $('#logging_form').submit()
-
-    #Clicks should be on whole div, not internal parts.
-    $('.vis-ctrl-title, .vis-ctrl-icon').click (e) ->
-      e.stopPropagation()
-      $(this).parents('div').click()
-    $('.vis-tab-child').click (e) ->
-      e.stopPropagation()
-      $(this).parents('a').click()
-    
+      #Clicks should be on whole div, not internal parts.
+      $('.vis-ctrl-title, .vis-ctrl-icon').click (e) ->
+        e.stopPropagation()
+        $(this).parents('div').click()
+      $('.vis-tab-child').click (e) ->
+        e.stopPropagation()
+        $(this).parents('a').click()
+      $('i.ignore-click').click (e) ->
+        e.stopPropagation()
+        $(this).parents('button').click()

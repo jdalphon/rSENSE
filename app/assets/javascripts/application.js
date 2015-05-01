@@ -54,4 +54,6 @@
 //= require slickgrid/slickgrid
 //= require slickgrid-editors/editors
 //
+//= require visualizations.js
+//= require visualizations/highvis/logging
 //= require_tree .

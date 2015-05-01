@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150422173710) do
+ActiveRecord::Schema.define(version: 20150424161021) do
 
   create_table "contrib_keys", force: true do |t|
     t.string   "name",       null: false
@@ -158,6 +158,7 @@ ActiveRecord::Schema.define(version: 20150422173710) do
     t.datetime "featured_at"
     t.text     "summary"
     t.integer  "thumb_id"
+    t.boolean  "should_log",  default: false
   end
 
 end

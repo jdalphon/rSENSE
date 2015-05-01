@@ -54,6 +54,11 @@ $ ->
       start: ->
         $('#' + @canvas).show()
         @drawControls()
+        #Add click event for clicks on anything with data-log-id set.
+        $('[data-log-id]').click (e) ->
+          log_click_event(e)
+        $('select').change (e) =>
+          log_click_event(e)
         @update()
 
       ###
@@ -379,6 +384,8 @@ $ ->
         ctx = {}
         ctx.id = 'save-ctrls'
         ctx.title = 'Save'
+        ctx.vis_id = $('#should_log').data('visualization_id')
+        ctx.show_save_log = $('#should_log').data('should_log')
         ctx.body = HandlebarsTemplates[hbCtrl('save')](ctx)
         save = HandlebarsTemplates[hbCtrl('body')](ctx)
         $('#vis-ctrls').append save

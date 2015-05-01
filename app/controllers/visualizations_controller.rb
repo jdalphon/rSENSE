@@ -3,7 +3,7 @@ class VisualizationsController < ApplicationController
   include ActionView::Helpers::DateHelper
 
   skip_before_filter :authorize, only: [:show, :displayVis, :index, :embedVis]
-
+  skip_before_filter :verify_authenticity_token, only: :save_logging
   after_action :allow_iframe, only: [:show, :displayVis]
 
   # GET /visualizations
@@ -54,7 +54,6 @@ class VisualizationsController < ApplicationController
       defaultVis:   tmp['defaultVis'],
       relVis:       tmp['relVis']
     }
-    @log_data = Vislog.first || Vislog.new
     recur = params.key?(:recur) ? params[:recur] == 'true' : false
 
     options = {}
@@ -68,6 +67,17 @@ class VisualizationsController < ApplicationController
       @presentation = false
     end
 
+    if can_edit? @visualization
+      @logs = Vislog.where(visualization_id: @visualization.id)
+      
+      #Send the visualization owner the desired log_data
+      if params.key?(:get_log)
+        logger.error "woooooooooooooooooooot"
+        @log_data = Vislog.find(params[:get_log]) || Vislog.new
+      end
+    end
+      
+    
     respond_to do |format|
       format.html do
         if params.try(:[], :embed) and params[:embed]
@@ -367,10 +377,10 @@ class VisualizationsController < ApplicationController
   def visualization_params
     if @cur_user.try(:admin)
       params[:visualization].permit(:content, :data, :project_id, :globals, :title, :user_id, :featured,
-                                    :featured_at, :tn_src, :tn_file_key, :summary, :thumb_id, :featured_media_id)
+                                    :featured_at, :tn_src, :tn_file_key, :summary, :thumb_id, :featured_media_id, :should_log)
     else
       params[:visualization].permit(:content, :data, :project_id, :globals, :title, :user_id,
-                                    :tn_src, :tn_file_key, :summary, :thumb_id, :featured_media_id)
+                                    :tn_src, :tn_file_key, :summary, :thumb_id, :featured_media_id, :should_log)
     end
   end
 

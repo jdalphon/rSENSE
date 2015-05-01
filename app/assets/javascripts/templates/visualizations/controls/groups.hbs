@@ -1,6 +1,6 @@
 <div class="vis-ctrl-sublock">
   <label for="group-by">Group by:</label>
-  <select id="group-by" class="form-control">
+  <select id="group-by" class="form-control" data-log-id='group_by-dropdown'>
     {{#each groupByFields}}
       <option value="{{value}}" data-log-id="{{logId}}">{{name}}</option>
     {{/each}}
